@@ -159,6 +159,27 @@ export function SpinnerColorsDemo() {
   )
 }
 
+// Figma's spinner "Type" axis (Default/Secondary/Outline) = the loading state
+// inside a button of that variant.
+export function SpinnerVariantsDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-3">
+      <Button disabled>
+        <Spinner />
+        Loading
+      </Button>
+      <Button variant="secondary" disabled>
+        <Spinner />
+        Loading
+      </Button>
+      <Button variant="outline" disabled>
+        <Spinner />
+        Loading
+      </Button>
+    </div>
+  )
+}
+
 /* ------------------------------------------------------------------ Sidebar */
 
 const sidebarNav = [

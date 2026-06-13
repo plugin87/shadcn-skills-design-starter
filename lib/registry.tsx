@@ -374,6 +374,7 @@ const entries: DocEntry[] = [
   comp("spinner", "Spinner", "An animated loading indicator.", <X.SpinnerDemo />, undefined, [
     { title: "Sizes", description: "12 / 16 / 24 / 32px, sized with token utilities.", preview: <X.SpinnerSizesDemo /> },
     { title: "Colors", description: "Red, green, blue and yellow — matched to the Figma color set.", preview: <X.SpinnerColorsDemo /> },
+    { title: "In buttons", description: "Loading state inside default, secondary and outline buttons.", preview: <X.SpinnerVariantsDemo /> },
   ]),
 
   /* ---- composed patterns (built from the primitives above) ---- */

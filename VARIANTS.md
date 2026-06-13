@@ -37,7 +37,7 @@
 | `select` | ✅ | — | ✅ all shown |
 | `sheet` | ✅ | — | ✅ all shown |
 | `sidebar` | ✅ | — | ✅ all shown |
-| `spinner` | 🟡 | **Type**: Secondary / Outline<br>**Size**: 12 / 16 / 24 / 32<br>**Color**: Red / Blue / Green / Yellow | Type=Secondary, Type=Outline |
+| `spinner` | ✅ | **Type**: Secondary / Outline<br>**Size**: 12 / 16 / 24 / 32<br>**Color**: Red / Blue / Green / Yellow | ✅ all shown |
 | `switch` | ✅ | — | ✅ all shown |
 | `textarea` | ✅ | — | ✅ all shown |
 | `toggle` | ✅ | — | ✅ all shown |
@@ -46,9 +46,9 @@
 
 **Legend** — ✅ documented with every visual variant shown · 🟡 documented but missing an example for a Figma variant · ⛔ not documented.
 
-## 🟡 Documented but missing a variant example (1)
+## 🟡 Documented but missing a variant example (0)
 
-- **spinner** — missing Type=Secondary, Type=Outline
+none — every documented component shows all its Figma visual variants.
 
 ## ⛔ Not documented (Figma component sets)
 
