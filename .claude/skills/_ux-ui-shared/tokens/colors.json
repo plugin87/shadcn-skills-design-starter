@@ -51,7 +51,7 @@
       "300": { "$type": "color", "$value": "#fca5a5" },
       "400": { "$type": "color", "$value": "#f87171" },
       "500": { "$type": "color", "$value": "#ef4444" },
-      "600": { "$type": "color", "$value": "#dc2626" },
+      "600": { "$type": "color", "$value": "#d3111a", "$description": "WCAG-tuned destructive red (darkened from #dc2626 so destructive-as-text clears 4.5:1 on white) — mirrors app/globals.css --destructive" },
       "700": { "$type": "color", "$value": "#b91c1c" },
       "800": { "$type": "color", "$value": "#991b1b" },
       "900": { "$type": "color", "$value": "#7f1d1d" },
