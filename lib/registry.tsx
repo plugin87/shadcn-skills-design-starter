@@ -373,7 +373,7 @@ const entries: DocEntry[] = [
   comp("native-select", "Native Select", "A styled native HTML select element.", <X.NativeSelectDemo />),
   comp("spinner", "Spinner", "An animated loading indicator.", <X.SpinnerDemo />, undefined, [
     { title: "Sizes", description: "12 / 16 / 24 / 32px, sized with token utilities.", preview: <X.SpinnerSizesDemo /> },
-    { title: "Colors", description: "Tinted with the data-viz chart tokens (token-driven).", preview: <X.SpinnerColorsDemo /> },
+    { title: "Colors", description: "Red, green, blue and yellow — matched to the Figma color set.", preview: <X.SpinnerColorsDemo /> },
   ]),
 
   /* ---- composed patterns (built from the primitives above) ---- */

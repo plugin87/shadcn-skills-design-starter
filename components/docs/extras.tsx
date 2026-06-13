@@ -128,22 +128,27 @@ export function SpinnerSizesDemo() {
   )
 }
 
-// Figma's Color axis (Red/Green/Blue/Yellow) maps to the theme's data-viz chart
-// tokens — the only multi-step color ramp in a blue-primary system — keeping it
-// token-driven instead of hardcoding off-theme hues.
+// ds-allow-hardcode: the Figma "Spinner" set defines a Color axis of literal
+// brand hues (Red/Green/Blue/Yellow) that have NO equivalent in the
+// blue-primary token theme (no green/yellow semantic tokens). Matched 1:1 to
+// the Figma component set's fills per design sign-off — the one sanctioned
+// exception to the semantic-token rule, scoped to this showcase demo.
+const SPINNER_COLORS = [
+  { label: "Red", hex: "#ef4444" }, // ds-allow-hardcode: exact Figma fill
+  { label: "Green", hex: "#22c55e" }, // ds-allow-hardcode: exact Figma fill
+  { label: "Blue", hex: "#3b82f6" }, // ds-allow-hardcode: exact Figma fill
+  { label: "Yellow", hex: "#eab308" }, // ds-allow-hardcode: exact Figma fill
+] as const
+
 export function SpinnerColorsDemo() {
   return (
     <div className="flex flex-wrap items-center gap-8">
-      {["text-chart-1", "text-chart-2", "text-chart-3", "text-chart-4"].map(
-        (color, i) => (
-          <div key={color} className="flex flex-col items-center gap-2">
-            <Spinner className={cn("size-6", color)} />
-            <span className="text-xs text-muted-foreground tabular-nums">
-              chart-{i + 1}
-            </span>
-          </div>
-        )
-      )}
+      {SPINNER_COLORS.map((c) => (
+        <div key={c.label} className="flex flex-col items-center gap-2">
+          <Spinner className="size-6" style={{ color: c.hex }} />
+          <span className="text-xs text-muted-foreground">{c.label}</span>
+        </div>
+      ))}
     </div>
   )
 }
