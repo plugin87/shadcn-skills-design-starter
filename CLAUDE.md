@@ -5,15 +5,19 @@ Guidance for Claude Code when working in this repository.
 ## Project overview
 
 A **Next.js (App Router) web app** whose UI is built with **shadcn/ui + Tailwind CSS v4**, driven
-by a **design system whose source of truth is a Figma file**. The Figma variables are exported and
-compiled into design tokens that the app consumes — so code and design stay in lockstep.
+by a **design system whose source of truth is a DTCG token set** (`.claude/skills/_ux-ui-shared/tokens/*.json`).
+The tokens compile into `app/globals.css` and stay in sync with Figma — so code and design stay in lockstep.
 
 The theme is **blue-primary** (`--primary` = blue-600), with full light + dark support.
 
+### Two design skill bundles (how they fit together)
+- **`shadcn-ui-design`** — the **authority for building/editing UI** in this Next.js app (semantic Tailwind utilities, shadcn CLI, no forking `components/ui/*`). Read it for any component/page/styling work.
+- **`_ux-ui-shared/` + the 17 `ux-ui` skills** (`design-tokens`, `a11y-audit`, `design-qa`, `design-review`, `performance`, `ux-writing`, …) — generic design knowledge + tooling. They **own the DTCG token source of truth** and provide gates (contrast, a11y, taste). For *building UI* they defer to `shadcn-ui-design`. See **Skill map** below.
+
 ### Current status
-- ✅ Design-system skill is in place: `.claude/skills/shadcn-ui-design/` (tokens, generator, assets).
-- ⛔ The Next.js app is **not scaffolded yet** — `app/`, `package.json`, etc. do not exist. See **Setup** below.
-- This is **not a git repo** yet; run `git init` before committing.
+- ✅ App scaffolded and running (`npm run dev`); this **is** a git repo.
+- ✅ `shadcn-ui-design` skill in place (`.claude/skills/shadcn-ui-design/`).
+- ✅ `ux-ui` skills + shared assets installed under `.claude/skills/_ux-ui-shared/`.
 
 ## Tech stack
 
@@ -30,19 +34,19 @@ The theme is **blue-primary** (`--primary` = blue-600), with full light + dark s
 ├─ CLAUDE.md                         # this file
 ├─ app/                             # Next.js App Router (pages, layout, globals.css)
 ├─ components/
-│  └─ ui/                           # shadcn primitives (added via CLI — don't fork)
-├─ lib/
-│  └─ utils.ts                      # cn() helper
+│  ├─ ui/                           # shadcn primitives (added via CLI — don't fork)
+│  └─ *.tsx                         # app components (theme-provider, docs, …)
+├─ lib/                             # utils.ts (cn()), tokens.ts, navigation.ts, registry.tsx
 ├─ components.json                  # shadcn config
-└─ .claude/
-   └─ skills/shadcn-ui-design/      # the design-system skill (authority on tokens)
-      ├─ SKILL.md                   # how to build UI in this project
-      ├─ references/
-      │  ├─ DESIGN.md               # full token reference — 1,804 vars (§A–§P)
-      │  └─ variables-export.json   # Figma token export (source of truth)
-      ├─ assets/                    # scaffold copied into the app
-      │  ├─ globals.css · components.json · lib/utils.ts
-      └─ scripts/generate-tokens.py # regenerates DESIGN.md + assets from the export
+├─ scripts/figma/                   # Figma tooling (figma-pull, audit-components/variants, extract-tokens)
+└─ .claude/skills/
+   ├─ shadcn-ui-design/             # AUTHORITY for building UI (semantic tokens, CLI)
+   │  ├─ SKILL.md · references/{DESIGN.md, variables-export.json} · assets/ · scripts/generate-tokens.py
+   ├─ _ux-ui-shared/                # shared assets for the ux-ui skills (NOT a skill — no SKILL.md)
+   │  ├─ tokens/*.json              # DTCG token SOURCE OF TRUTH (14 files)
+   │  ├─ components/ taste/ design-systems/ frameworks/ accessibility/ workflows/ content/
+   │  └─ scripts/                   # validators + build_tokens.mjs + a11y/contrast/taste gates
+   └─ design-tokens/ a11y-audit/ design-qa/ … (17 ux-ui skills)
 ```
 
 ## Commands
@@ -57,7 +61,15 @@ npx tsc --noEmit            # typecheck
 # shadcn components
 npx shadcn@latest add button card dialog input form table   # add primitives
 
-# Regenerate design tokens from the Figma export (see Token workflow)
+# Build app/globals.css from the DTCG token source of truth (see Token workflow)
+node .claude/skills/_ux-ui-shared/scripts/build_tokens.mjs
+
+# Validate tokens (JSON + alias resolution) and contrast
+python3 .claude/skills/_ux-ui-shared/scripts/validate_tokens.py
+python3 .claude/skills/_ux-ui-shared/scripts/validate_contrast.py
+
+# Figma sync (downstream) + legacy Figma-export generator
+node scripts/figma/figma-pull.mjs
 python3 .claude/skills/shadcn-ui-design/scripts/generate-tokens.py
 ```
 
@@ -73,27 +85,27 @@ Core rules (full detail in `SKILL.md`):
 - **Pair surface/foreground** (on `card` → `text-card-foreground`).
 - **Keep a11y** — `focus-visible` rings, `aria-*`, `Label htmlFor`.
 
-## Token workflow (Figma → code)
+## Token workflow (DTCG → code)
 
-The tokens are **generated, never hand-edited**. The loop:
+The **DTCG token files are the source of truth**; `app/globals.css` is **generated, never hand-edited**.
+The DTCG set already holds the real blue-primary theme (blue-600 `#2563eb`, dark overrides, WCAG-verified).
 
 ```
-Figma file (variables)
-   │  export plugin (lazyyysync-variables-v1)
-   ▼
-references/variables-export.json   ← source of truth in-repo (1,804 variables)
-   │  python3 scripts/generate-tokens.py
-   ▼
-references/DESIGN.md   +   assets/globals.css · components.json · lib/utils.ts
-   │  copy assets into the app
+.claude/skills/_ux-ui-shared/tokens/*.json   ← SOURCE OF TRUTH (14 DTCG files)
+   │  node .claude/skills/_ux-ui-shared/scripts/build_tokens.mjs
    ▼
 app/globals.css (consumed by Tailwind v4 @theme inline)
+   ▲
+   └── Figma (downstream sync) — mirror tokens ↔ Variables via the `figma-integration` skill
 ```
 
-**To change a token:** update the Figma file → re-export to `references/variables-export.json` →
-run `generate-tokens.py` → copy `assets/globals.css` to `app/globals.css`. The generator **asserts
-the variable count is exactly 1,804** and fails loudly if the export is incomplete. Never edit color
-values in `DESIGN.md` or `globals.css` by hand.
+**To change a token:** edit the relevant `_ux-ui-shared/tokens/*.json` → run `validate_tokens.py`
+(+ `validate_contrast.py` for colors) → rebuild `app/globals.css`. Then optionally push to Figma.
+Never edit color values in `app/globals.css` by hand.
+
+> **Legacy Figma-export pipeline** (`shadcn-ui-design/references/variables-export.json` +
+> `generate-tokens.py`, 1,804 vars) is retained as a Figma snapshot/reference. The DTCG set is now
+> upstream; keep the two consistent rather than diverging.
 
 ## Figma integration (MCP)
 
@@ -102,7 +114,7 @@ A Figma MCP server is available. Figma file: `<FIGMA_FILE_URL>` *(fill in when a
 - **Before any Figma write/read-via-JS**, load the required skill first (e.g. `/figma-use`, `/figma-generate-design`) — they are mandatory prerequisites for `use_figma` / design generation.
 - **Design → code:** use `get_design_context` / `get_screenshot` / `get_metadata` to read a frame, then implement it as a Next.js page/component using **only this project's tokens** (never the raw colors Figma reports).
 - **Code → design / mapping:** use Code Connect (`get_code_connect_map`, `add_code_connect_map`) to map `components/ui/*` to their Figma components, so design-to-code stays consistent.
-- **Tokens:** the Figma variables are the upstream source — keep `references/variables-export.json` in sync with the file, then regenerate (see Token workflow). Do not diverge code tokens from Figma.
+- **Tokens:** the DTCG `_ux-ui-shared/tokens/*.json` are upstream; **Figma is a downstream sync target**. Mirror tokens → Figma Variables (and pull design frames back) via the `figma-integration` skill; keep them consistent (see Token workflow).
 
 ## Setup (scaffold the app)
 
@@ -127,11 +139,87 @@ on `<html>`. The `.dark` token values are already in `globals.css`.
 
 **Do**
 - Follow the `shadcn-ui-design` skill for every UI change; read `references/DESIGN.md` §A first.
-- Keep code tokens identical to the Figma export; regenerate rather than hand-edit.
+- Change tokens by editing `_ux-ui-shared/tokens/*.json` then rebuilding — never hand-edit `globals.css`.
+- Run the gates and report real output (see **Verification Protocol**) before claiming done.
 - Verify before done: no hardcoded colors, light+dark both work, responsive, a11y, `npm run lint` + `tsc` pass.
 
 **Don't**
-- ❌ Hardcode colors/spacing/radius outside the token set.
+- ❌ Hardcode colors/spacing/radius outside the token set (no raw hex/px or `bg-blue-*` palette utilities).
 - ❌ Fork `components/ui/*`; override with `className` + `cn()` instead.
-- ❌ Edit generated files (`DESIGN.md`, `globals.css` values) by hand — change the Figma export and regenerate.
+- ❌ Edit generated `app/globals.css` values by hand — change the DTCG tokens and rebuild.
 - ❌ Use raw Figma color values when implementing a design — map them to this project's semantic tokens.
+
+---
+
+## Skill map (which skill for what)
+
+| Need | Use |
+|------|-----|
+| Build/edit a component, page, styling, dark mode | **`shadcn-ui-design`** (authority) |
+| Create/extend/audit DTCG tokens, palettes, type/spacing scales | `design-tokens`, `token-build`, `brandkit` |
+| Apply a look/brand (138 systems), redesign/polish | `apply-aesthetic`, `redesign` |
+| Accessibility check, QA gates, design critique | `a11y-audit`, `design-qa`, `design-review` |
+| Perf (Web Vitals), prototyping, UX copy, governance | `performance`, `prototype`, `ux-writing`, `governance` |
+| Screenshot/image → code; migrate from another DS | `image-to-code`, `migrate-design-system` |
+| Figma ↔ code sync | `figma-integration` (+ `/figma-*` MCP skills) |
+
+The `ux-ui` skills are **knowledge + gates**; for *building UI* they defer to `shadcn-ui-design`.
+Their shared assets (tokens, specs, scripts, design-system library) live in `.claude/skills/_ux-ui-shared/`.
+
+## Token System
+
+3-tier DTCG hierarchy (used by `design-tokens`, `brandkit`, `token-build`):
+
+- **Primitive** — raw palette values (`blue.600` = `#2563eb`). Never referenced directly.
+- **Semantic** — purpose aliases (`action.primary` → `{primitive.blue.600}`). Used in styling.
+- **Component** — component-scoped (`button.primary-bg-hover`). Used in implementations.
+
+All tokens are DTCG (`$type`/`$value`) in `.claude/skills/_ux-ui-shared/tokens/` (14 files: `colors`,
+`typography`, `spacing`, `shadows`, `borders`, `breakpoints`, `motion`, `gradients`, `opacity`, `blur`,
+`sizing`, `states`, `theming`, `data-viz`). Naming: `{category}.{property}.{variant}-{state}`.
+**Dark mode** swaps at the **semantic** layer (`colors.json` → `dark` section), not at primitives.
+
+## Verification Protocol — run gates, never claim
+
+Trust comes from reproducible gate output, not assertions. Build *with* the gates, not after.
+
+1. **Never state a number you didn't measure** — any contrast ratio / "WCAG pass" / "100%" must come from running a gate. If not run, say "not verified yet."
+2. **Verify ALL states**, not just resting — `node .claude/skills/_ux-ui-shared/scripts/verify_states.mjs <file> [--dark]` (default/hover/focus).
+3. **One-command gate before done** — `node .claude/skills/_ux-ui-shared/scripts/accuracy_report.mjs` (tokens + contrast + spec + no-hardcode + theme-refs + no-emoji + real-render WCAG, light & dark). Report the actual `N/N`.
+4. **Responsive is gated** — `node .claude/skills/_ux-ui-shared/scripts/verify_responsive.mjs <file|dir>` (no overflow at 280/320/414px).
+5. **Render and LOOK** — gates don't prove pixels; screenshot the harness and click each control to confirm state changes.
+6. **Zero emoji as icons** — use lucide SVG or plain words; `python3 .claude/skills/_ux-ui-shared/scripts/check_no_emoji.py` fails the build on any emoji.
+
+## Single-Theme Consistency (non-negotiable)
+
+Every page/screen/component renders from **one shared token theme** — never a per-page palette.
+
+1. **One source of truth** — `_ux-ui-shared/tokens/*.json` → one CSS-variable layer (`app/globals.css`) imported once at the app root.
+2. **No off-theme values** — zero hardcoded hex/px/timing in component code (`lint_hardcodes.py`). Exception: adapter config mapping our tokens into a 3rd-party API.
+3. **Real WCAG on the source** — the theme passes WCAG 2.2 in light AND dark before shipping (`validate_contrast.py`).
+4. **A page that "looks different" is a bug** — it bypassed the theme.
+
+## Component Guidelines
+
+**Quality bar** — every component has: anatomy, variants, sizes (sm/md/lg), the 8 states, token mapping, accessibility (ARIA + keyboard + SR). Specs: `.claude/skills/_ux-ui-shared/components/{atoms,molecules,organisms,templates,navigation,feedback,forms-advanced,overlays}.md`.
+
+**The 8 states** (all interactive components): Default · Hover (`-hover`) · Focus (`shadow.focus-ring`) · Active (`-active`) · Disabled (opacity + no pointer events) · Loading (spinner + `aria-busy`, if async) · Error (`border.error` + message, if input) · Selected (`interactive.selected-bg`, if selectable).
+
+## File Reference Map
+
+```
+.claude/skills/
+├─ shadcn-ui-design/        ← AUTHORITY for building UI; references/DESIGN.md (legacy Figma snapshot)
+└─ _ux-ui-shared/
+   ├─ tokens/*.json         ← DTCG token SOURCE OF TRUTH (14 files)
+   ├─ components/*.md       ← component specs (atoms → templates)
+   ├─ taste/                ← anti-slop doctrine, 138 aesthetic systems, motion grammar
+   ├─ design-systems/       ← interop crosswalk + library/<name>/DESIGN.md (138 brands)
+   ├─ frameworks/           ← adapter protocol + React/Next/SwiftUI/… adapters
+   ├─ accessibility/        ← WCAG checklist, ARIA patterns, i18n-rtl, cognitive, vision
+   ├─ workflows/            ← design-review, qa, handoff, prototyping, redesign-audit, governance
+   ├─ content/voice-tone.md ← UX writing / voice & tone
+   └─ scripts/              ← validate_tokens · validate_contrast · lint_hardcodes · accuracy_report ·
+                              verify_states · verify_responsive · measure_render · build_tokens · …
+scripts/figma/              ← figma-pull · audit-components · audit-variants · extract-tokens
+```
