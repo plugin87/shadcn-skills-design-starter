@@ -14,6 +14,13 @@ export default defineConfig({
   plugins: [storybookTest({ configDir: path.join(dirname, ".storybook") })],
   test: {
     name: "storybook",
+    // Honest coverage: `include` instruments every primitive (not just the ones
+    // a story imports) so untested components report 0% instead of being hidden.
+    coverage: {
+      provider: "v8",
+      include: ["components/ui/**", "lib/**"],
+      reporter: ["text", "html"],
+    },
     browser: {
       enabled: true,
       headless: true,

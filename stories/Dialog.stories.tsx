@@ -51,6 +51,40 @@ export const Default: Story = {
   ),
 }
 
+// showCloseButton={false} — covers that branch (no built-in X; footer handles close).
+export const NoCloseButton: Story = {
+  render: () => (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open</Button>
+      </DialogTrigger>
+      <DialogContent showCloseButton={false} className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Subscription</DialogTitle>
+          <DialogDescription>Choose how you want to continue.</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant="outline">Maybe later</Button>
+          </DialogClose>
+          <Button>Subscribe</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  ),
+  // open it so the showCloseButton={false} branch renders, then close.
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole("button", { name: /open/i }))
+    const dialog = await screen.findByRole("dialog")
+    await expect(within(dialog).getByText("Subscription")).toBeInTheDocument()
+    await userEvent.click(screen.getByRole("button", { name: /maybe later/i }))
+    await waitFor(() =>
+      expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
+    )
+  },
+}
+
 // Interaction test: open the dialog, assert content, then close it.
 export const OpenAndClose: Story = {
   ...Default,

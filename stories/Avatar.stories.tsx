@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite"
 
 import {
   Avatar,
+  AvatarBadge,
   AvatarFallback,
   AvatarGroup,
   AvatarGroupCount,
@@ -49,6 +50,16 @@ export const Sizes: Story = {
         </Avatar>
       ))}
     </div>
+  ),
+}
+
+export const WithBadge: Story = {
+  render: (args) => (
+    <Avatar {...args}>
+      <AvatarImage src={SRC} alt="shadcn" />
+      <AvatarFallback>CN</AvatarFallback>
+      <AvatarBadge />
+    </Avatar>
   ),
 }
 

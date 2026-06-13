@@ -39,3 +39,13 @@ export const WithIcon: Story = {
     </Badge>
   ),
 }
+
+// Renders as a child element (asChild) — covers the Slot branch.
+export const AsChild: Story = {
+  name: "As link (asChild)",
+  render: (args) => (
+    <Badge {...args} asChild>
+      <a href="#docs">Link badge</a>
+    </Badge>
+  ),
+}

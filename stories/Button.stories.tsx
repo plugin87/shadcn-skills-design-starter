@@ -81,6 +81,16 @@ export const Disabled: Story = {
   args: { disabled: true },
 }
 
+// Renders as a child element (asChild) — covers the Slot branch.
+export const AsChild: Story = {
+  name: "As link (asChild)",
+  render: (args) => (
+    <Button {...args} asChild>
+      <a href="#docs">Link button</a>
+    </Button>
+  ),
+}
+
 // Interaction test: clicking the button fires onClick.
 export const Clickable: Story = {
   play: async ({ args, canvasElement }) => {
