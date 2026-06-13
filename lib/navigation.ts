@@ -67,6 +67,7 @@ export const navigation: NavGroup[] = [
       { title: "Select", slug: "select" },
       { title: "Separator", slug: "separator" },
       { title: "Sheet", slug: "sheet" },
+      { title: "Sidebar", slug: "sidebar" },
       { title: "Skeleton", slug: "skeleton" },
       { title: "Slider", slug: "slider" },
       { title: "Sonner", slug: "sonner" },

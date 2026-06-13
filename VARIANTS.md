@@ -11,7 +11,7 @@
 | `badge` 🟡 | ✅ | **Type**: Default / Secondary / Secondary_icon / Destructive / Outline / Default_number / Destructive_number / Secondary_number | — |
 | `breadcrumb` 🟡 | ✅ | **Type**: Custom_seperator / Responsive / Dropdown / Collapsed / Link_component | — |
 | `button` 🟡 | ✅ | **Type**: Primary / Ghost / Outline / Secondary / Destructive / Link / Icon / With icon / Loading | State |
-| `button-group` | ⛔ | **Size**: Small / Default / Large | State, Property 1 |
+| `button-group` 🟡 | ✅ | **Size**: Small / Default / Large | State, Property 1 |
 | `calendar` | ✅ | — | State |
 | `checkbox` 🟡 | ✅ | **Type**: Card / Checked | — |
 | `collapsible` | ✅ | — | State |
@@ -24,18 +24,18 @@
 | `dropdown-menu` | ✅ | — | State |
 | `hover-card` | ✅ | — | State |
 | `input` | ✅ | — | State |
-| `input-group` | ⛔ | **Type**: 1 / 2 / 3 / 4 | — |
+| `input-group` 🟡 | ✅ | **Type**: 1 / 2 / 3 / 4 | — |
 | `input-otp` | ✅ | — | State |
-| `item` | ⛔ | **Type**: Default / Outline / Muted / 1 / 2 | State |
+| `item` 🟡 | ✅ | **Type**: Default / Outline / Muted / 1 / 2 | State |
 | `label` | ✅ | — | State |
 | `menubar` | ✅ | — | State |
-| `native-select` | ⛔ | — | State |
+| `native-select` | ✅ | — | State |
 | `navigation-menu` | ✅ | — | State |
 | `popover` | ✅ | — | State |
 | `select` | ✅ | — | State |
 | `sheet` | ✅ | — | State |
-| `sidebar` | ⛔ | — | State |
-| `spinner` | ⛔ | **Type**: Default / Secondary / Outline / 1 / 2<br>**Size**: 12 / 16 / 24 / 32<br>**Color**: Red / Blue / Green / Yellow | — |
+| `sidebar` | ✅ | — | State |
+| `spinner` 🟡 | ✅ | **Type**: Default / Secondary / Outline / 1 / 2<br>**Size**: 12 / 16 / 24 / 32<br>**Color**: Red / Blue / Green / Yellow | — |
 | `switch` | ✅ | — | State |
 | `textarea` | ✅ | — | State |
 | `toggle` | ✅ | — | State |
@@ -49,8 +49,12 @@
 - **badge** — Type (Default, Secondary, Secondary_icon, Destructive, Outline, Default_number, Destructive_number, Secondary_number)
 - **breadcrumb** — Type (Custom_seperator, Responsive, Dropdown, Collapsed, Link_component)
 - **button** — Type (Primary, Ghost, Outline, Secondary, Destructive, Link, Icon, With icon, Loading)
+- **button-group** — Size (Small, Default, Large)
 - **checkbox** — Type (Card, Checked)
+- **input-group** — Type (1, 2, 3, 4)
+- **item** — Type (Default, Outline, Muted, 1, 2)
+- **spinner** — Type (Default, Secondary, Outline, 1, 2); Size (12, 16, 24, 32); Color (Red, Blue, Green, Yellow)
 
 ## ⛔ Not documented (Figma component sets)
 
-`button-group`, `input-group`, `item`, `native-select`, `sidebar`, `spinner`
+none

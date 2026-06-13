@@ -324,6 +324,13 @@ const entries: DocEntry[] = [
   ]),
   comp("separator", "Separator", "Visually or semantically separates content.", <S.SeparatorDemo />),
   comp("sheet", "Sheet", "Extends the Dialog component to display content that complements the main content.", <S.SheetDemo />),
+  comp(
+    "sidebar",
+    "Sidebar",
+    "A composable, themeable sidebar — the same primitive that powers this documentation's navigation. Compose a header, grouped menus, collapsible sub-menus, badges, and a footer, paired with an inset content area.",
+    <X.SidebarDemo />,
+    "max-w-3xl",
+  ),
   comp("skeleton", "Skeleton", "Use to show a placeholder while content is loading.", <S.SkeletonDemo />, undefined, [
     { title: "Card", preview: <S.SkeletonCardDemo /> },
   ]),
@@ -353,7 +360,9 @@ const entries: DocEntry[] = [
   comp("item", "Item", "A flexible row for lists — media, content and actions.", <X.ItemDemo />),
   comp("kbd", "Kbd", "Displays keyboard keys and shortcuts.", <X.KbdDemo />),
   comp("native-select", "Native Select", "A styled native HTML select element.", <X.NativeSelectDemo />),
-  comp("spinner", "Spinner", "An animated loading indicator.", <X.SpinnerDemo />),
+  comp("spinner", "Spinner", "An animated loading indicator.", <X.SpinnerDemo />, undefined, [
+    { title: "Sizes", description: "12 / 16 / 24 / 32px, sized with token utilities.", preview: <X.SpinnerSizesDemo /> },
+  ]),
 
   /* ---- composed patterns (built from the primitives above) ---- */
   {
