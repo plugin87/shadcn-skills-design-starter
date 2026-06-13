@@ -9,6 +9,9 @@ export function ThemeToggle() {
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
+    // next-themes hydration guard: theme is only known on the client, so this
+    // one-time mount flag must be set in an effect.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true)
   }, [])
 
