@@ -286,6 +286,8 @@ const entries: DocEntry[] = [
     { title: "Sizes", description: "Scale with size utilities.", preview: <S.AvatarSizesDemo /> },
   ]),
   comp("breadcrumb", "Breadcrumb", "Displays the path to the current resource using a hierarchy of links.", <S.BreadcrumbDemo />, undefined, [
+    { title: "Custom separator", description: "Swap the chevron for any node — here a slash.", preview: <X.BreadcrumbSeparatorDemo /> },
+    { title: "Collapsed", description: "Collapse middle items behind an ellipsis.", preview: <X.BreadcrumbCollapsedDemo /> },
     { title: "Dropdown", description: "Collapse middle items into a dropdown menu.", preview: <S.BreadcrumbDropdownDemo /> },
   ]),
   comp("calendar", "Calendar", "A date field component that allows users to enter and edit dates.", <S.CalendarDemo />),
@@ -352,16 +354,26 @@ const entries: DocEntry[] = [
   ]),
 
   /* ---- the remaining shadcn registry items ---- */
-  comp("button-group", "Button Group", "Groups related buttons into a single connected unit.", <X.ButtonGroupDemo />),
+  comp("button-group", "Button Group", "Groups related buttons into a single connected unit.", <X.ButtonGroupDemo />, undefined, [
+    { title: "Sizes", description: "Small, default and large, driven by the buttons' size.", preview: <X.ButtonGroupSizesDemo /> },
+  ]),
   comp("chart", "Chart", "Beautiful charts built with Recharts and your design tokens.", <X.ChartDemo />, "max-w-md"),
   comp("empty", "Empty", "An empty state placeholder for when there's no content.", <X.EmptyDemo />),
   comp("field", "Field", "A form field wrapper with label, control and description.", <X.FieldDemo />),
-  comp("input-group", "Input Group", "An input with attached addons such as icons or buttons.", <X.InputGroupDemo />),
-  comp("item", "Item", "A flexible row for lists — media, content and actions.", <X.ItemDemo />),
+  comp("input-group", "Input Group", "An input with attached addons such as icons or buttons.", <X.InputGroupDemo />, undefined, [
+    { title: "Affixes", description: "Inline icons, result counts and URL/currency affixes.", preview: <X.InputGroupAffixesDemo /> },
+    { title: "Actions", description: "Inline buttons — send, copy, search and split menus.", preview: <X.InputGroupActionsDemo /> },
+    { title: "Textarea", description: "Block-end addons on a textarea — counters and a send button.", preview: <X.InputGroupTextareaDemo /> },
+    { title: "Status", description: "Loading spinner, validation check and an info trigger.", preview: <X.InputGroupStatusDemo /> },
+  ]),
+  comp("item", "Item", "A flexible row for lists — media, content and actions.", <X.ItemDemo />, undefined, [
+    { title: "Variants", description: "Default, outline and muted surfaces.", preview: <X.ItemVariantsDemo /> },
+  ]),
   comp("kbd", "Kbd", "Displays keyboard keys and shortcuts.", <X.KbdDemo />),
   comp("native-select", "Native Select", "A styled native HTML select element.", <X.NativeSelectDemo />),
   comp("spinner", "Spinner", "An animated loading indicator.", <X.SpinnerDemo />, undefined, [
     { title: "Sizes", description: "12 / 16 / 24 / 32px, sized with token utilities.", preview: <X.SpinnerSizesDemo /> },
+    { title: "Colors", description: "Tinted with the data-viz chart tokens (token-driven).", preview: <X.SpinnerColorsDemo /> },
   ]),
 
   /* ---- composed patterns (built from the primitives above) ---- */

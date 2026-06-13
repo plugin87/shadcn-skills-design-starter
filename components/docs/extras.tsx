@@ -10,6 +10,15 @@ import {
   Frame,
   ChartPie,
   ChevronsUpDown,
+  Slash,
+  Mail,
+  CreditCard,
+  Info,
+  Copy,
+  Check,
+  ChevronDown,
+  DollarSign,
+  ArrowUp,
 } from "lucide-react"
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
 
@@ -44,8 +53,20 @@ import { ButtonGroup } from "@/components/ui/button-group"
 import {
   InputGroup,
   InputGroupAddon,
+  InputGroupButton,
   InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
 } from "@/components/ui/input-group"
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
 import {
   Field,
   FieldDescription,
@@ -103,6 +124,26 @@ export function SpinnerSizesDemo() {
           <span className="text-xs text-muted-foreground tabular-nums">{s.label}px</span>
         </div>
       ))}
+    </div>
+  )
+}
+
+// Figma's Color axis (Red/Green/Blue/Yellow) maps to the theme's data-viz chart
+// tokens — the only multi-step color ramp in a blue-primary system — keeping it
+// token-driven instead of hardcoding off-theme hues.
+export function SpinnerColorsDemo() {
+  return (
+    <div className="flex flex-wrap items-center gap-8">
+      {["text-chart-1", "text-chart-2", "text-chart-3", "text-chart-4"].map(
+        (color, i) => (
+          <div key={color} className="flex flex-col items-center gap-2">
+            <Spinner className={cn("size-6", color)} />
+            <span className="text-xs text-muted-foreground tabular-nums">
+              chart-{i + 1}
+            </span>
+          </div>
+        )
+      )}
     </div>
   )
 }
@@ -408,5 +449,252 @@ export function ChartDemo() {
         <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
       </BarChart>
     </ChartContainer>
+  )
+}
+
+/* -------------------------------------------- variant additions (Figma parity) */
+
+// button-group — Size axis (Small / Default / Large) from the Figma "Button Group" set
+export function ButtonGroupSizesDemo() {
+  return (
+    <div className="flex flex-col items-start gap-3">
+      {(
+        [
+          { size: "sm", label: "Small" },
+          { size: "default", label: "Default" },
+          { size: "lg", label: "Large" },
+        ] as const
+      ).map(({ size, label }) => (
+        <ButtonGroup key={size}>
+          <Button variant="outline" size={size}>
+            {label}
+          </Button>
+          <Button variant="outline" size={size}>
+            Button
+          </Button>
+          <Button variant="outline" size={size}>
+            Group
+          </Button>
+        </ButtonGroup>
+      ))}
+    </div>
+  )
+}
+
+// item — Type axis (Default / Outline / Muted) from the Figma "Item" set
+export function ItemVariantsDemo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      {(["default", "outline", "muted"] as const).map((variant) => (
+        <Item key={variant} variant={variant}>
+          <ItemMedia>
+            <Avatar>
+              <AvatarFallback>ER</AvatarFallback>
+            </Avatar>
+          </ItemMedia>
+          <ItemContent>
+            <ItemTitle className="capitalize">{variant}</ItemTitle>
+            <ItemDescription>The {variant} item surface.</ItemDescription>
+          </ItemContent>
+          <ItemActions>
+            <Button size="sm" variant="outline">
+              Open
+            </Button>
+          </ItemActions>
+        </Item>
+      ))}
+    </div>
+  )
+}
+
+// breadcrumb — Custom separator (Figma "Custom_seperator")
+export function BreadcrumbSeparatorDemo() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>
+          <Slash />
+        </BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">Components</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator>
+          <Slash />
+        </BreadcrumbSeparator>
+        <BreadcrumbItem>
+          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  )
+}
+
+// breadcrumb — Collapsed with ellipsis (Figma "Collapsed")
+export function BreadcrumbCollapsedDemo() {
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbEllipsis />
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">Components</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  )
+}
+
+// input-group — full parity with the Figma "Input Group" showcase, grouped by
+// intent: affixes, actions, textarea, status (≈12 addon configurations).
+export function InputGroupAffixesDemo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <Search />
+        </InputGroupAddon>
+        <InputGroupInput placeholder="Search…" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>12 results</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <InputGroupText>https://</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput placeholder="example.com" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>.com</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <Mail />
+        </InputGroupAddon>
+        <InputGroupInput type="email" placeholder="Enter your email" />
+      </InputGroup>
+      <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <DollarSign />
+        </InputGroupAddon>
+        <InputGroupInput placeholder="0.00" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>USD</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  )
+}
+
+export function InputGroupActionsDemo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      <InputGroup>
+        <InputGroupInput placeholder="Enter your message…" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton variant="default" size="sm">
+            Send
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput defaultValue="https://x.com/shadcn" readOnly />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton aria-label="Copy" size="icon-xs">
+            <Copy />
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput placeholder="Search the docs…" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton variant="outline" size="sm">
+            <Search />
+            Search
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput placeholder="Filter…" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton size="sm">
+            All
+            <ChevronDown />
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  )
+}
+
+export function InputGroupTextareaDemo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      <InputGroup>
+        <InputGroupTextarea placeholder="Enter your message" />
+        <InputGroupAddon align="block-end">
+          <InputGroupText className="text-muted-foreground">
+            120 characters left
+          </InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupTextarea placeholder="Ask, search or chat…" />
+        <InputGroupAddon align="block-end">
+          <InputGroupText>Auto</InputGroupText>
+          <InputGroupButton
+            aria-label="Send"
+            variant="default"
+            size="icon-xs"
+            className="ml-auto"
+          >
+            <ArrowUp />
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
+  )
+}
+
+export function InputGroupStatusDemo() {
+  return (
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      <InputGroup>
+        <InputGroupInput placeholder="Saving changes…" />
+        <InputGroupAddon align="inline-end">
+          <Spinner />
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupAddon align="inline-start">
+          <CreditCard />
+        </InputGroupAddon>
+        <InputGroupInput placeholder="Card number" />
+        <InputGroupAddon align="inline-end">
+          <Check className="text-primary" />
+        </InputGroupAddon>
+      </InputGroup>
+      <InputGroup>
+        <InputGroupInput placeholder="API key" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton aria-label="More info" size="icon-xs">
+            <Info />
+          </InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    </div>
   )
 }
