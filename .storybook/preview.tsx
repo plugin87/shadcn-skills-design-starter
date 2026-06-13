@@ -10,9 +10,16 @@ const preview: Preview = {
     controls: {
       matchers: { color: /(background|color)$/i, date: /Date$/i },
     },
-    // axe runs on every story; surfaces violations in the a11y panel without
-    // failing the test run. Flip to "error" to enforce in CI.
-    a11y: { test: "todo" },
+    // axe runs on every story and FAILS the test run on any violation, so a11y
+    // regressions are caught in CI alongside the interaction tests.
+    a11y: {
+      test: "error",
+      config: {
+        // "region" expects all content inside a landmark — a false positive for
+        // isolated component stories (a component is not a full page).
+        rules: [{ id: "region", enabled: false }],
+      },
+    },
   },
   decorators: [
     withThemeByClassName({

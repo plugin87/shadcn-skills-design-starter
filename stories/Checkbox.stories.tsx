@@ -17,11 +17,15 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+export const Default: Story = { args: { "aria-label": "Accept terms" } }
 
-export const Checked: Story = { args: { defaultChecked: true } }
+export const Checked: Story = {
+  args: { defaultChecked: true, "aria-label": "Accept terms" },
+}
 
-export const Disabled: Story = { args: { disabled: true } }
+export const Disabled: Story = {
+  args: { disabled: true, "aria-label": "Accept terms" },
+}
 
 export const WithLabel: Story = {
   render: (args) => (

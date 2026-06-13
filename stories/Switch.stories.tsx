@@ -18,20 +18,24 @@ const meta = {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Default: Story = {}
+export const Default: Story = { args: { "aria-label": "Airplane mode" } }
 
 export const Sizes: Story = {
   render: (args) => (
     <div className="flex items-center gap-4">
-      <Switch {...args} size="sm" />
-      <Switch {...args} size="default" />
+      <Switch {...args} size="sm" aria-label="Small" />
+      <Switch {...args} size="default" aria-label="Default" />
     </div>
   ),
 }
 
-export const Checked: Story = { args: { defaultChecked: true } }
+export const Checked: Story = {
+  args: { defaultChecked: true, "aria-label": "Airplane mode" },
+}
 
-export const Disabled: Story = { args: { disabled: true } }
+export const Disabled: Story = {
+  args: { disabled: true, "aria-label": "Airplane mode" },
+}
 
 export const WithLabel: Story = {
   render: (args) => (
