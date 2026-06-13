@@ -108,7 +108,12 @@ function hardcodedColorHits() {
         walk(p)
       } else if (/\.(tsx|ts)$/.test(e.name)) {
         readFileSync(p, "utf8").split("\n").forEach((line, i) => {
-          if (re.test(line) && !line.includes("github.com/shadcn.png") && !/oklch/.test(line)) {
+          if (
+            re.test(line) &&
+            !line.includes("github.com/shadcn.png") &&
+            !/oklch/.test(line) &&
+            !line.includes("ds-allow-hardcode") // honour the same sanctioned-exception marker as lint_hardcodes.py
+          ) {
             hits.push(`${p.replace(root + "/", "")}:${i + 1}`)
           }
         })
