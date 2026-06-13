@@ -58,6 +58,11 @@ npm run build && npm start  # production build
 npm run lint                # eslint
 npx tsc --noEmit            # typecheck
 
+# Storybook — dev/QA workbench (Storybook 10 + nextjs-vite). Stories in stories/<Component>.stories.tsx
+npm run storybook           # dev → http://localhost:6006
+npm run build-storybook     # static build
+npm run test-storybook      # run every story's play() as a Vitest browser test (chromium)
+
 # shadcn components
 npx shadcn@latest add button card dialog input form table   # add primitives
 

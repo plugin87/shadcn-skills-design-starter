@@ -223,6 +223,21 @@ node .claude/skills/_ux-ui-shared/scripts/build_tokens.mjs --out dist/tokens.css
 - **Add a component** = add a nav item (`lib/navigation.ts`) + a registry entry (`lib/registry.tsx`) + a demo (`components/docs/`).
 - **Reproducible audits**: `scripts/figma/audit-components.mjs` → `AUDIT.md` (coverage); `scripts/figma/audit-variants.mjs` → `VARIANTS.md` (variant axes).
 
+## 🧪 Storybook — the dev/QA workbench
+
+`/docs` is for **browsing**; **Storybook** is the **interactive workbench** for the dev & QA team — toggle props live, see every variant/state, flip light↔dark, run a11y checks, and run interaction tests in CI. It renders from the **same tokens** (`app/globals.css`) so it never drifts from the app.
+
+```bash
+npm run storybook        # dev workbench → http://localhost:6006
+npm run build-storybook  # static build (storybook-static/)
+npm run test-storybook   # run every story's play() as a Vitest browser test (chromium)
+```
+
+- **Stack** — Storybook 10 + `@storybook/nextjs-vite` (Vite builder, reuses `postcss.config.mjs`).
+- **Addons** — **a11y** (axe on every story) · **themes** (light/dark toolbar, toggles `.dark` on `<html>`) · **vitest** (interaction tests) · **docs** (autodocs + prop tables from `argTypes`).
+- **Stories** live in [`stories/`](stories) — currently a **core set of 16** primitives with rich controls and the 8 states (Button, Badge, Input, Label, Card, Checkbox, Switch, Select, Tabs, Dialog, Alert, Avatar, Tooltip, Spinner, Skeleton, Sonner). **Add one** = `stories/<Component>.stories.tsx` (CSF3 `Meta`/`StoryObj`, import from `@/components/ui/*`).
+- Config: [`.storybook/main.ts`](.storybook/main.ts), [`.storybook/preview.tsx`](.storybook/preview.tsx), [`vitest.config.ts`](vitest.config.ts).
+
 ## 🛡️ Quality gates & verification protocol
 
 > **Trust comes from reproducible gate output, not assertions.** Build *with* the gates, not after. Never state a contrast ratio or "WCAG pass" you didn't just measure.
@@ -282,6 +297,11 @@ This repo ships a project guide ([`CLAUDE.md`](CLAUDE.md)) that Claude Code read
 npm run dev                         # dev server
 npm run build && npm start          # production
 npm run lint && npx tsc --noEmit    # lint + typecheck
+
+# Storybook (dev/QA workbench)
+npm run storybook                   # → http://localhost:6006
+npm run build-storybook             # static build
+npm run test-storybook              # interaction tests (Vitest browser / chromium)
 
 # shadcn primitives
 npx shadcn@latest add button card dialog input form table
