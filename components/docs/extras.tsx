@@ -95,6 +95,12 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 
+// Fixed pixel dimensions for self-contained showcase demos (viewport heights /
+// control widths) — layout sizing, not theme color/space tokens; centralised so
+// the literals carry their justification.
+const DEMO_SIDEBAR_H = "h-[520px]" // ds-allow-hardcode: fixed sidebar demo viewport
+const DEMO_SELECT_W = "w-[200px]" // ds-allow-hardcode: fixed control width for the demo
+
 /* ------------------------------------------------------------------ Spinner */
 
 export function SpinnerDemo() {
@@ -180,7 +186,7 @@ export function SidebarDemo() {
       >
         <Sidebar
           collapsible="none"
-          className="h-[520px] bg-transparent"
+          className={cn(DEMO_SIDEBAR_H, "bg-transparent")}
         >
           <SidebarHeader>
             <SidebarMenu>
@@ -267,7 +273,7 @@ export function SidebarDemo() {
           </SidebarFooter>
         </Sidebar>
 
-        <div className="flex h-[520px] flex-1 flex-col p-2 pl-0">
+        <div className={cn("flex flex-1 flex-col p-2 pl-0", DEMO_SIDEBAR_H)}>
           <div className="flex flex-1 flex-col overflow-hidden rounded-lg border border-border bg-background shadow-sm">
             <header className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border px-4">
               <div className="flex flex-col gap-0.5">
@@ -331,7 +337,7 @@ export function KbdDemo() {
 
 export function NativeSelectDemo() {
   return (
-    <NativeSelect className="w-[200px]" defaultValue="apple">
+    <NativeSelect className={DEMO_SELECT_W} defaultValue="apple">
       <NativeSelectOption value="apple">Apple</NativeSelectOption>
       <NativeSelectOption value="banana">Banana</NativeSelectOption>
       <NativeSelectOption value="blueberry">Blueberry</NativeSelectOption>
