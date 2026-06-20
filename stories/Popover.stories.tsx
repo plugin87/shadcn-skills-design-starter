@@ -51,9 +51,9 @@ export const Anchored: Story = {
           Open
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-72">
+      <PopoverContent className="w-72" aria-labelledby="anchored-popover-title">
         <PopoverHeader>
-          <PopoverTitle>Quick settings</PopoverTitle>
+          <PopoverTitle id="anchored-popover-title">Quick settings</PopoverTitle>
           <PopoverDescription>Adjust the layer below.</PopoverDescription>
         </PopoverHeader>
       </PopoverContent>

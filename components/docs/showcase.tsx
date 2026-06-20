@@ -555,7 +555,7 @@ export function HoverCardDemo() {
 
 export function InputOTPDemo() {
   return (
-    <InputOTP maxLength={6}>
+    <InputOTP maxLength={6} aria-label="One-time password">
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -687,9 +687,11 @@ export function PopoverDemo() {
       <PopoverTrigger asChild>
         <Button variant="outline">Open popover</Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent className="w-80" aria-labelledby="popover-demo-title">
         <div className="grid gap-2">
-          <h4 className="font-medium leading-none">Dimensions</h4>
+          <h4 id="popover-demo-title" className="font-medium leading-none">
+            Dimensions
+          </h4>
           <p className="text-sm text-muted-foreground">
             Set the dimensions for the layer.
           </p>
@@ -704,7 +706,7 @@ export function PopoverDemo() {
 export function ProgressDemo() {
   return (
     <div className="w-full max-w-sm">
-      <Progress value={60} />
+      <Progress value={60} aria-label="Loading progress" />
     </div>
   )
 }
@@ -1091,7 +1093,7 @@ export function ProgressStatesDemo() {
     <div className="grid w-full max-w-sm gap-4">
       {[25, 50, 75, 100].map((v) => (
         <div key={v} className="flex items-center gap-3">
-          <Progress value={v} />
+          <Progress value={v} aria-label={`${v}% complete`} />
           <span className="w-10 text-right text-xs text-muted-foreground">
             {v}%
           </span>
@@ -1223,7 +1225,7 @@ export function PaginationMiniDemo() {
 
 export function InputOTPPatternDemo() {
   return (
-    <InputOTP maxLength={4}>
+    <InputOTP maxLength={4} aria-label="One-time password">
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
