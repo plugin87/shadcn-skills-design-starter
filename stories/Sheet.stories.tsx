@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite"
+import { expect, userEvent, within } from "storybook/test"
 
 import { SheetDemo } from "@/components/docs/showcase"
 
@@ -13,3 +14,14 @@ export default meta
 type Story = StoryObj<typeof meta>
 
 export const Default: Story = { render: () => <SheetDemo /> }
+
+// Open the sheet so its content / header / title / description mount.
+export const Opened: Story = {
+  render: () => <SheetDemo />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement)
+    await userEvent.click(canvas.getByRole("button", { name: /^open$/i }))
+    const sheet = within(document.body)
+    await expect(await sheet.findByText(/edit profile/i)).toBeInTheDocument()
+  },
+}

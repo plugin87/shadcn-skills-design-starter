@@ -359,7 +359,12 @@ export function CollapsibleDemo() {
           @peduarte starred 3 repositories
         </h4>
         <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="icon" className="size-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-8"
+            aria-label="Toggle repositories"
+          >
             <ChevronsUpDown />
           </Button>
         </CollapsibleTrigger>
