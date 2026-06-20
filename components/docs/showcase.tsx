@@ -359,7 +359,12 @@ export function CollapsibleDemo() {
           @peduarte starred 3 repositories
         </h4>
         <CollapsibleTrigger asChild>
-          <Button variant="ghost" size="icon" className="size-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-8"
+            aria-label="Toggle repositories"
+          >
             <ChevronsUpDown />
           </Button>
         </CollapsibleTrigger>
@@ -550,7 +555,7 @@ export function HoverCardDemo() {
 
 export function InputOTPDemo() {
   return (
-    <InputOTP maxLength={6}>
+    <InputOTP maxLength={6} aria-label="One-time password">
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />
@@ -682,9 +687,11 @@ export function PopoverDemo() {
       <PopoverTrigger asChild>
         <Button variant="outline">Open popover</Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80">
+      <PopoverContent className="w-80" aria-labelledby="popover-demo-title">
         <div className="grid gap-2">
-          <h4 className="font-medium leading-none">Dimensions</h4>
+          <h4 id="popover-demo-title" className="font-medium leading-none">
+            Dimensions
+          </h4>
           <p className="text-sm text-muted-foreground">
             Set the dimensions for the layer.
           </p>
@@ -699,7 +706,7 @@ export function PopoverDemo() {
 export function ProgressDemo() {
   return (
     <div className="w-full max-w-sm">
-      <Progress value={60} />
+      <Progress value={60} aria-label="Loading progress" />
     </div>
   )
 }
@@ -831,7 +838,7 @@ export function SkeletonDemo() {
 export function SliderDemo() {
   return (
     <div className="w-full max-w-sm">
-      <Slider defaultValue={[50]} max={100} step={1} />
+      <Slider defaultValue={[50]} max={100} step={1} aria-label="Volume" />
     </div>
   )
 }
@@ -1086,7 +1093,7 @@ export function ProgressStatesDemo() {
     <div className="grid w-full max-w-sm gap-4">
       {[25, 50, 75, 100].map((v) => (
         <div key={v} className="flex items-center gap-3">
-          <Progress value={v} />
+          <Progress value={v} aria-label={`${v}% complete`} />
           <span className="w-10 text-right text-xs text-muted-foreground">
             {v}%
           </span>
@@ -1111,8 +1118,8 @@ export function SkeletonCardDemo() {
 export function SliderRangeDemo() {
   return (
     <div className="grid w-full max-w-sm gap-6">
-      <Slider defaultValue={[25, 75]} max={100} step={1} />
-      <Slider defaultValue={[40]} max={100} step={10} />
+      <Slider defaultValue={[25, 75]} max={100} step={1} aria-label="Price" />
+      <Slider defaultValue={[40]} max={100} step={10} aria-label="Quantity" />
     </div>
   )
 }
@@ -1143,13 +1150,13 @@ export function ToggleGroupOutlineDemo() {
         <ToggleGroupItem value="right">Right</ToggleGroupItem>
       </ToggleGroup>
       <ToggleGroup type="single" size="sm" defaultValue="b">
-        <ToggleGroupItem value="a">
+        <ToggleGroupItem value="a" aria-label="Bold">
           <Bold />
         </ToggleGroupItem>
-        <ToggleGroupItem value="b">
+        <ToggleGroupItem value="b" aria-label="Italic">
           <Italic />
         </ToggleGroupItem>
-        <ToggleGroupItem value="c">
+        <ToggleGroupItem value="c" aria-label="Underline">
           <Underline />
         </ToggleGroupItem>
       </ToggleGroup>
@@ -1218,7 +1225,7 @@ export function PaginationMiniDemo() {
 
 export function InputOTPPatternDemo() {
   return (
-    <InputOTP maxLength={4}>
+    <InputOTP maxLength={4} aria-label="One-time password">
       <InputOTPGroup>
         <InputOTPSlot index={0} />
         <InputOTPSlot index={1} />

@@ -78,6 +78,23 @@ node scripts/figma/figma-pull.mjs
 python3 .claude/skills/shadcn-ui-design/scripts/generate-tokens.py
 ```
 
+### Continuous Integration
+
+`.github/workflows/ci.yml` runs on every push/PR to `main` as four parallel jobs — each
+job runs the **documented commands above verbatim**, so green CI == the local gates pass:
+
+| Job | Enforces |
+|-----|----------|
+| **Lint & typecheck** | `npm run lint` · `npx tsc --noEmit` |
+| **Design-system gates** | **token drift** (`build_tokens.mjs` → `git diff --exit-code app/globals.css`: the generated CSS must match the DTCG source) · `validate_tokens.py` · `validate_contrast.py` · `lint_hardcodes.py` · `check_no_emoji.py` |
+| **Next.js build** | `npm run build` |
+| **Storybook** | `npm run test-storybook` (every story's `play()` + axe a11y in real Chromium — `a11y.test: "error"` fails CI) · `npm run build-storybook` (uploads `storybook-static/` + coverage artifacts) |
+
+> The render-harness gates from the **Verification Protocol** below
+> (`accuracy_report.mjs`, `verify_states.mjs`, `verify_responsive.mjs`) need a harness
+> not wired into this Next app, so they stay **local/manual** — Storybook's axe pass is
+> CI's a11y enforcement. Keep the table in sync when you add or remove a CI job.
+
 ## The design system & the skill
 
 **`.claude/skills/shadcn-ui-design/` is the authority for all UI/styling.** Whenever you add or edit

@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Generated build artifacts (gitignored) — linting their minified output
+    // yields thousands of false positives and breaks `npm run lint` locally
+    // once build-storybook / coverage have run.
+    "storybook-static/**",
+    "coverage/**",
   ]),
 ]);
 

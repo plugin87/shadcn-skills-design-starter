@@ -133,6 +133,10 @@ function CommandSeparator({
   return (
     <CommandPrimitive.Separator
       data-slot="command-separator"
+      // cmdk hardcodes role="separator", which ARIA disallows as a child of the
+      // list's role="listbox" (axe: aria-required-children). The divider is
+      // purely decorative, so hide it from the a11y tree to clear the violation.
+      aria-hidden="true"
       className={cn("-mx-1 h-px bg-border", className)}
       {...props}
     />
