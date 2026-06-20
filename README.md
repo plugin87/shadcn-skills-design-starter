@@ -235,8 +235,9 @@ npm run test-storybook   # run every story's play() as a Vitest browser test (ch
 
 - **Stack** — Storybook 10 + `@storybook/nextjs-vite` (Vite builder, reuses `postcss.config.mjs`).
 - **Addons** — **a11y** (axe on every story) · **themes** (light/dark toolbar, toggles `.dark` on `<html>`) · **vitest** (interaction tests) · **docs** (autodocs + prop tables from `argTypes`).
-- **Stories** live in [`stories/`](stories) — currently a **core set of 16** primitives with rich controls and the 8 states (Button, Badge, Input, Label, Card, Checkbox, Switch, Select, Tabs, Dialog, Alert, Avatar, Tooltip, Spinner, Skeleton, Sonner). **Add one** = `stories/<Component>.stories.tsx` (CSF3 `Meta`/`StoryObj`, import from `@/components/ui/*`).
+- **Stories** live in [`stories/`](stories) — **all 52 primitives** are covered (one `stories/<Component>.stories.tsx` each), with rich controls, the 8 states, and `play()` interaction tests. **Add one** = `stories/<Component>.stories.tsx` (CSF3 `Meta`/`StoryObj`, import from `@/components/ui/*`).
 - Config: [`.storybook/main.ts`](.storybook/main.ts), [`.storybook/preview.tsx`](.storybook/preview.tsx), [`vitest.config.ts`](vitest.config.ts).
+- **CI** — [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs `test-storybook` (every `play()` + axe in real Chromium) and `build-storybook` on every push/PR; `a11y.test: "error"` makes any axe violation fail the build. See **CI** under Quality gates.
 
 ## 🛡️ Quality gates & verification protocol
 
@@ -269,6 +270,19 @@ npm run test-storybook   # run every story's play() as a Vitest browser test (ch
 # the single command to run before declaring UI "done"
 node .claude/skills/_ux-ui-shared/scripts/accuracy_report.mjs
 ```
+
+### Continuous Integration
+
+[`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs these on every push/PR to `main`, as four parallel jobs:
+
+| Job | Gate |
+| --- | --- |
+| **Lint & typecheck** | `npm run lint` · `npx tsc --noEmit` |
+| **Design-system gates** | **token drift** — rebuild `globals.css` from the DTCG source and `git diff --exit-code` (the generated CSS must match `tokens/*.json`) · `validate_tokens.py` · `validate_contrast.py` · `lint_hardcodes.py` · `check_no_emoji.py` |
+| **Next.js build** | `npm run build` |
+| **Storybook** | `npm run test-storybook` (every `play()` + axe a11y, real Chromium) · `npm run build-storybook` (+ coverage / static artifacts) |
+
+The render-harness gates (`accuracy_report.mjs`, `verify_states.mjs`, `verify_responsive.mjs`) need a harness not wired into this Next app, so they stay **local/manual** — Storybook's axe pass is CI's a11y enforcement.
 
 ## 🔗 Figma integration
 

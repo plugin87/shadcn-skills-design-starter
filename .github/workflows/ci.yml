@@ -1,0 +1,130 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Cancel superseded runs on the same ref (e.g. rapid PR pushes).
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: "24"
+
+jobs:
+  # ── 1. Static checks: ESLint + TypeScript ──────────────────────────────────
+  lint-typecheck:
+    name: Lint & typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: ESLint
+        run: npm run lint
+      - name: TypeScript
+        run: npx tsc --noEmit
+
+  # ── 2. Design-system gates: the token source of truth must stay authoritative
+  #      (globals.css regenerates byte-identical) and the no-off-theme / a11y
+  #      contract from CLAUDE.md is enforced. ────────────────────────────────
+  design-system:
+    name: Design-system gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: npm ci
+
+      # globals.css is GENERATED from the DTCG token set — never hand-edited.
+      # Rebuild it and fail if the working tree changed: that means the committed
+      # CSS drifted from tokens/*.json (the single source of truth).
+      - name: Token drift — globals.css must match the DTCG source
+        run: |
+          node .claude/skills/_ux-ui-shared/scripts/build_tokens.mjs
+          git diff --exit-code app/globals.css \
+            || (echo "::error::app/globals.css is out of sync with tokens/*.json — run build_tokens.mjs and commit." && exit 1)
+
+      - name: Validate tokens (JSON + alias resolution)
+        run: python3 .claude/skills/_ux-ui-shared/scripts/validate_tokens.py
+
+      - name: Validate contrast (WCAG 2.2, light + dark)
+        run: python3 .claude/skills/_ux-ui-shared/scripts/validate_contrast.py
+
+      - name: No hardcoded colors / spacing / timing
+        run: python3 .claude/skills/_ux-ui-shared/scripts/lint_hardcodes.py
+
+      - name: No emoji as icons
+        run: python3 .claude/skills/_ux-ui-shared/scripts/check_no_emoji.py
+
+  # ── 3. Production build of the Next.js app ─────────────────────────────────
+  build:
+    name: Next.js build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"
+
+  # ── 4. Storybook: every story's play() + axe a11y as real-browser tests, then
+  #      a static build (catches story/MDX compile errors). ──────────────────
+  storybook:
+    name: Storybook (a11y + interaction)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+
+      # The vitest browser runner drives stories in a real Chromium. axe runs on
+      # every story with `a11y.test: "error"`, so any a11y or interaction
+      # regression fails this job.
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Storybook tests (with coverage)
+        run: npm run test-storybook -- --coverage
+
+      - name: Build static Storybook
+        run: npm run build-storybook
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Upload static Storybook
+        uses: actions/upload-artifact@v4
+        with:
+          name: storybook-static
+          path: storybook-static/
+          retention-days: 14
