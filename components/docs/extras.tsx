@@ -358,7 +358,7 @@ export function KbdDemo() {
 
 export function NativeSelectDemo() {
   return (
-    <NativeSelect className={DEMO_SELECT_W} defaultValue="apple">
+    <NativeSelect className={DEMO_SELECT_W} defaultValue="apple" aria-label="Fruit">
       <NativeSelectOption value="apple">Apple</NativeSelectOption>
       <NativeSelectOption value="banana">Banana</NativeSelectOption>
       <NativeSelectOption value="blueberry">Blueberry</NativeSelectOption>
@@ -635,7 +635,7 @@ export function InputGroupActionsDemo() {
   return (
     <div className="flex w-full max-w-sm flex-col gap-3">
       <InputGroup>
-        <InputGroupInput placeholder="Enter your message…" />
+        <InputGroupInput placeholder="Enter your message…" aria-label="Message" />
         <InputGroupAddon align="inline-end">
           <InputGroupButton variant="default" size="sm">
             Send
@@ -643,7 +643,11 @@ export function InputGroupActionsDemo() {
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput defaultValue="https://x.com/shadcn" readOnly />
+        <InputGroupInput
+          defaultValue="https://x.com/shadcn"
+          readOnly
+          aria-label="Share link"
+        />
         <InputGroupAddon align="inline-end">
           <InputGroupButton aria-label="Copy" size="icon-xs">
             <Copy />
@@ -651,7 +655,7 @@ export function InputGroupActionsDemo() {
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput placeholder="Search the docs…" />
+        <InputGroupInput placeholder="Search the docs…" aria-label="Search docs" />
         <InputGroupAddon align="inline-end">
           <InputGroupButton variant="outline" size="sm">
             <Search />
@@ -660,7 +664,7 @@ export function InputGroupActionsDemo() {
         </InputGroupAddon>
       </InputGroup>
       <InputGroup>
-        <InputGroupInput placeholder="Filter…" />
+        <InputGroupInput placeholder="Filter…" aria-label="Filter" />
         <InputGroupAddon align="inline-end">
           <InputGroupButton size="sm">
             All

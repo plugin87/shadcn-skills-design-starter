@@ -838,7 +838,7 @@ export function SkeletonDemo() {
 export function SliderDemo() {
   return (
     <div className="w-full max-w-sm">
-      <Slider defaultValue={[50]} max={100} step={1} />
+      <Slider defaultValue={[50]} max={100} step={1} aria-label="Volume" />
     </div>
   )
 }
@@ -1118,8 +1118,8 @@ export function SkeletonCardDemo() {
 export function SliderRangeDemo() {
   return (
     <div className="grid w-full max-w-sm gap-6">
-      <Slider defaultValue={[25, 75]} max={100} step={1} />
-      <Slider defaultValue={[40]} max={100} step={10} />
+      <Slider defaultValue={[25, 75]} max={100} step={1} aria-label="Price" />
+      <Slider defaultValue={[40]} max={100} step={10} aria-label="Quantity" />
     </div>
   )
 }
@@ -1150,13 +1150,13 @@ export function ToggleGroupOutlineDemo() {
         <ToggleGroupItem value="right">Right</ToggleGroupItem>
       </ToggleGroup>
       <ToggleGroup type="single" size="sm" defaultValue="b">
-        <ToggleGroupItem value="a">
+        <ToggleGroupItem value="a" aria-label="Bold">
           <Bold />
         </ToggleGroupItem>
-        <ToggleGroupItem value="b">
+        <ToggleGroupItem value="b" aria-label="Italic">
           <Italic />
         </ToggleGroupItem>
-        <ToggleGroupItem value="c">
+        <ToggleGroupItem value="c" aria-label="Underline">
           <Underline />
         </ToggleGroupItem>
       </ToggleGroup>
